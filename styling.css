@@ -1,0 +1,57 @@
+#title {
+    text-align: center;
+} 
+
+#navbar {
+    text-align: center;
+    margin: 10px;
+}
+
+#navbar li{
+    display: inline;
+}
+
+.button {
+    background-color: #000000;
+    color: #FFFFFF;
+    width: 90px;
+    height: 40px;
+}
+
+#start {
+    position: relative;
+    right: 15%;
+}
+
+#pause {
+    position: relative;
+    right: 0%;
+}
+
+#reset {
+    position: relative;
+    left: 15%;
+}
+
+#board td{
+    width: 25px;
+    height: 25px;
+    
+}
+
+.unvisited {
+    border: 1px solid rgb(175, 216, 248);
+    background-color:white;
+}
+
+.wall {
+    background-color: black;
+}
+
+.start {
+    background-color: blue;
+}
+
+.end {
+    background-color: red;
+}
