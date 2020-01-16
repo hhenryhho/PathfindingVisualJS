@@ -54,9 +54,10 @@ Board.prototype.addEventListeners = function() {
                     self.isStartDragging = true
                 } else if ($(this).attr('class') === 'end') {
                     self.isEndDragging = true
-                } else if ($(this).attr('class') === 'unvisited' || 'wall') { 
+                } else if ($(this).attr('class') === 'unvisited' || $(this).attr('class') === 'wall') { 
                     self.changeUnvisitedToWall(this)
                     self.isDragging = true
+                    console.log(self.isDragging)
                 }
             })
             // Create an event listener for mouse up
@@ -64,6 +65,7 @@ Board.prototype.addEventListeners = function() {
                 self.isDragging = false
                 self.isStartDragging = false
                 self.isEndDragging = false
+                console.log(self.isDragging)
             })
             // Create an event listener for mouse drag
             $(node).mouseenter(self, function() {
@@ -97,7 +99,6 @@ Board.prototype.addEventListeners = function() {
 Board.prototype.changeUnvisitedToWall = function(node) {
     if ($(node).attr('class') === 'unvisited') {
         $(node).addClass('wall').removeClass('unvisited');
-        console.log(node)
         this.nodeWall.push(node)
     } else if ($(node).attr('class') === 'wall') {
         for (currentNode in this.nodeWall) {
@@ -193,7 +194,7 @@ Board.prototype.breadthFirstTraversal = function() {
 let titleHeight = document.getElementById("title").clientHeight
 let documentHeight = $(window).height()
 let documentWidth = $(window).width()
-let height = (documentHeight - titleHeight)/30
+let height = (documentHeight - titleHeight)/32
 let width = documentWidth/25
 
 let board = new Board()
