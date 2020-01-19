@@ -176,8 +176,8 @@ Board.prototype.setSpecial = function(x, y, option) {
         previousNode = document.getElementById(this.endCoordinate)
         counterOption = 'start'
     }
-    // If the new location is a wall
-    if (node.className === 'wall' || node.className === 'unvisited') {
+    // If the new location is a not the option
+    if (node.className === 'wall' || node.className === 'unvisited' || node.className === 'visited') {
         // Change the class name to be the option
         node.className = option
         // Set the status of the node to be the option
@@ -223,10 +223,12 @@ Board.prototype.clear = function() {
     }
 
     let numberOfVisitedNodes = this.nodeVisited.length
-    // Go through all nodes that are currently walls
+    // Go through all nodes that are currently visited 
     for (i = 0; i < numberOfVisitedNodes; i++) {
         // Remove the node from the nodeWall array
         currentNode = this.nodeVisited.pop()
+        // Remove the parent property
+        currentNode.parent = null
         // Change the class name of the node in html to be a unvisited
         document.getElementById(currentNode.x + ',' + currentNode.y).className = 'unvisited'
         // Change the status of the node in nodeArray to be a unvisited
@@ -240,9 +242,14 @@ Board.prototype.breadthFirstTraversal = function() {
         finalPath = []
         // Push the end node onto the finalPath
         finalPath.push(endNode)
+        // While the current node has no parent node
         while (endNode.parent != null) {
-            self.setNormal(endNode.x, endNode.y, 'visited', 'path')
+            if (endNode.status !== 'end'){
+                self.setNormal(endNode.x, endNode.y, 'visited', 'path')
+            }
+            // Keep on pushing the current node onto the final path array
             finalPath.push(endNode.parent)
+            // Move onto the parent
             endNode = endNode.parent
         }
         return finalPath
@@ -261,23 +268,20 @@ Board.prototype.breadthFirstTraversal = function() {
     // Enqueue the starting node
     queue.push(this.nodeArray[xStart][yStart])
 
-    // Mark the start as visited
-    this.setNormal(xStart, yStart, 'unvisited', 'visited')
-
     // While the queue is not empty
     while (queue.length !== 0) {
         // Dequeue the currentNode
         currentNode = queue.shift()
         for (i = 0; i < 4; i++){
             // Get a neighbor node
-            if (currentNode.x + dr[i] >= 0 && currentNode.x + dr[i] <= height && currentNode.y + dc[i] >= 0 && currentNode.y + dc[i] <= width){
+            if (currentNode.x + dr[i] >= 0 && currentNode.x + dr[i] <= height + 1 && currentNode.y + dc[i] >= 0 && currentNode.y + dc[i] <= width){
                 nextNode = this.nodeArray[currentNode.x + dr[i]][currentNode.y + dc[i]]
                 // If the neighbor node is the end node
                 if (nextNode === this.nodeArray[xEnd][yEnd]){
                     // Set the neighbor node's parent as the current node
                     nextNode.parent = currentNode
-                    backtrace(this, nextNode)
-                    return
+                    queue = []
+                    return backtrace(this, nextNode)
                 // If the neighbor node is not visited yet
                 } else if (nextNode.status === 'unvisited') {
                     // Add the neighbor node to the queue
