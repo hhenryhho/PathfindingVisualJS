@@ -91,9 +91,10 @@ Board.prototype.addEventListeners = function() {
     }
     $('#start').click(self, function(){
         self.breadthFirstTraversal()
+        alert("Do not press any buttons until animation is finished")
     })
     $('#pause').click(function(){
-        clearTimeout()
+        alert("Work in progress")
     })
     $('#reset').click(self, function(){
         self.clear()
