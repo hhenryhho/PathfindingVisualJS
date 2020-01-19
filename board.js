@@ -93,7 +93,7 @@ Board.prototype.addEventListeners = function() {
         self.breadthFirstTraversal()
     })
     $('#pause').click(function(){
-        alert('Ill do this later')
+        clearTimeout()
     })
     $('#reset').click(self, function(){
         self.clear()
@@ -178,18 +178,15 @@ Board.prototype.setSpecial = function(x, y, option) {
     }
     // If the new location is a not the option
     if (node.className === 'wall' || node.className === 'unvisited' || node.className === 'visited') {
-        // Change the class name to be the option
+        // Change the class name of the new location to be the option
         node.className = option
-        // Set the status of the node to be the option
+        // Set the status of the new node to be the option
         this.nodeArray[x][y].status = option
     // If the new location is the counter option
     } else if (node.className === counterOption) {
         // End the function
         return
     } 
-
-    // Update new node status
-    this.nodeArray[x][y].status = option
 
     // Erase previous node location if user is dragging a node or if user resets
     if (this.isStartDragging === true || this.isEndDragging === true || this.isReset === true) {
@@ -237,14 +234,18 @@ Board.prototype.clear = function() {
 }
 
 // Queue implemented using push() and shift() javascript functions
-Board.prototype.breadthFirstTraversal = function() {
-    function backtrace (self, endNode) {
+Board.prototype.breadthFirstTraversal = async function() {
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function backtrace (self, endNode) {
         finalPath = []
         // Push the end node onto the finalPath
         finalPath.push(endNode)
         // While the current node has no parent node
         while (endNode.parent != null) {
             if (endNode.status !== 'end'){
+                await sleep(50)
                 self.setNormal(endNode.x, endNode.y, 'visited', 'path')
             }
             // Keep on pushing the current node onto the final path array
@@ -289,14 +290,13 @@ Board.prototype.breadthFirstTraversal = function() {
                     // Set the neighbor node's parent as the current node
                     nextNode.parent = currentNode
                     // Mark as visited
+                    await sleep(10)
                     this.setNormal(nextNode.x, nextNode.y, 'unvisited', 'visited')
                 }
             }
         }
     }
 }
-
-
 
 let titleHeight = document.getElementById('header').clientHeight
 let documentHeight = window.innerHeight
