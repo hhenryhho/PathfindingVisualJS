@@ -276,7 +276,7 @@ Board.prototype.breadthFirstTraversal = async function() {
         currentNode = queue.shift()
         for (i = 0; i < 4; i++){
             // Get a neighbor node
-            if (currentNode.x + dr[i] >= 0 && currentNode.x + dr[i] <= height + 1 && currentNode.y + dc[i] >= 0 && currentNode.y + dc[i] <= width){
+            if (currentNode.x + dr[i] >= 0 && currentNode.x + dr[i] < board.nodeArray.length && currentNode.y + dc[i] >= 0 && currentNode.y + dc[i] < board.nodeArray[0].length){
                 nextNode = this.nodeArray[currentNode.x + dr[i]][currentNode.y + dc[i]]
                 // If the neighbor node is the end node
                 if (nextNode === this.nodeArray[xEnd][yEnd]){
@@ -304,6 +304,7 @@ let documentHeight = window.innerHeight
 let documentWidth = window.innerWidth
 let height = (documentHeight - titleHeight)/30
 let width = documentWidth/25
+
 
 let board = new Board()
 
