@@ -8,6 +8,7 @@ function Board() {
     this.isStartDragging = false
     this.isEndDragging = false
     this.isReset = false
+    this.isPaused = false
 }
 
 // Create the grid
@@ -62,6 +63,7 @@ Board.prototype.addEventListeners = function() {
                     self.isDragging = true
                 } else if ($(this).attr('class') === 'wall') {
                     self.setNormal(x, y, 'wall', 'unvisited')
+                    self.isDragging = true
                 }
             })
             // Create an event listener for mouse up
@@ -89,13 +91,22 @@ Board.prototype.addEventListeners = function() {
             })
         }
     }
-    $('#start').click(self, function(){
+    $('#begin').click(self, function(){
         self.breadthFirstTraversal()
-        alert("Do not press any buttons until animation is finished")
+        alert('Do not click other buttons until animation is finished')
     })
-    $('#pause').click(function(){
-        alert("Work in progress")
+    
+    $("#pause").attr("disabled", true);
+    $('#pause').click(self, function(){
+        if (self.isPaused) {
+            self.isPaused = false;
+            $('#pause').html('Pause')
+        } else {
+            self.isPaused = true;
+            $('#pause').html('Start')
+        }
     })
+
     $('#reset').click(self, function(){
         self.clear()
         self.isReset = true
@@ -236,8 +247,8 @@ Board.prototype.clear = function() {
 
 // Queue implemented using push() and shift() javascript functions
 Board.prototype.breadthFirstTraversal = async function() {
-    function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
+    function sleep(ms) { 
+            return new Promise(resolve => setTimeout(resolve, ms));
     }
     async function backtrace (self, endNode) {
         finalPath = []
